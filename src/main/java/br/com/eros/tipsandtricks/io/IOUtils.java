@@ -8,9 +8,12 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.text.BadLocationException;
@@ -68,7 +71,7 @@ public class IOUtils {
         }
         return sb.toString();
     }
-
+@Deprecated
     public static boolean saveStringToFile(String filename, String stringStream) {
         boolean save = false;
         BufferedWriter bw = null;
@@ -87,6 +90,15 @@ public class IOUtils {
         }
 
         return save;
+    }
+    
+    public static void writeStringToFile(String pathToFile, String stringStream) {
+         Path logFile = Paths.get(pathToFile);
+        try (BufferedWriter writer = Files.newBufferedWriter(logFile,StandardCharsets.UTF_8, StandardOpenOption.WRITE)) {
+            writer.write(stringStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static String getExternalPageSourceCode(String strUrl) {
@@ -154,5 +166,114 @@ public class IOUtils {
         }
         return null;
     }
+    
+//    public static String[] grabAllFileNamesFromDir(String pathURI) {
+//        List<String>  listFileNames = null;
+//         try {
+//            //
+//            // Create a WatchService and register the logDir path with the
+//            // WatchService for ENTRY_CREATE.
+//            //
+//             listFileNames = new ArrayList<>();
+//            WatchService watcher = FileSystems.getDefault().newWatchService();
+//            Path logDir = Paths.get(pathURI);
+//            logDir.register(watcher, ENTRY_CREATE);
+// 
+//            while (true) {
+//                WatchKey key = watcher.take();
+//                for (WatchEvent<?> event : key.pollEvents()) {
+//                    if (event.kind() == ENTRY_CREATE) {
+//                        //
+//                        // Get the name of created file.
+//                        //
+//                        WatchEvent<Path> ev = (WatchEvent<Path>) event;
+//                        Path filename = ev.context();
+// 
+//                        System.out.printf("A new file %s was created.%n",
+//                                filename.getFileName());
+//                        listFileNames.add(filename.getFileName().toString());
+//                    }
+//                }
+//            }
+////            return (String[]) listFileNames.toArray();
+//        } catch (IOException | InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        
+//        return null;
+//    }
+    
+    public static void dirMonitor(String uri){
+        try {
+            //
+            // Creates a instance of WatchService.
+            //
+            WatchService watcher = FileSystems.getDefault().newWatchService();
+ 
+            //
+            // Registers the logDir below with a watch service.
+            //
+            Path logDir = Paths.get(uri);
+            logDir.register(watcher,
+                    ENTRY_CREATE, ENTRY_MODIFY, ENTRY_DELETE);
+ 
+            //
+            // Monitor the logDir at listen for change notification.
+            //
+            while (true) {
+                WatchKey key = watcher.take();
+                for (WatchEvent<?> event : key.pollEvents()) {
+                    WatchEvent.Kind<?> kind = event.kind();
+ 
+                    if (kind == ENTRY_CREATE) {
+                        System.out.println("Entry was created on log dir.");
+                    } else if (kind == ENTRY_MODIFY) {
+                        System.out.println("Entry was modified on log dir.");
+                    } else if (kind == ENTRY_DELETE) {
+                        System.out.println("Entry was deleted from log dir.");
+                    }
+                }
+                key.reset();
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
+    /**
+     * 
+     * @param pathToDir  /home/eros/seilah
+     * @param fileExtintion  "*.txt"
+     * @return list of file names
+     */
+    public static List<String> grabListFilesNamesFromDir(String pathToDir,String fileExtension){
+        Path logPath = Paths.get(pathToDir);
+        List<String>  listFileNames = new ArrayList<>();
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(logPath, fileExtension)) {
+            for (Path entry : stream) {
+//                System.out.println(entry.getFileName());
+                listFileNames.add(entry.getFileName().toString());
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        return listFileNames;
+    }
+/**
+ * 
+ * @param pathToDir
+ * @param fileExtension 
+ */    
+    public static void deleteFilesByExtension(String pathToDir,String fileExtension){
+        Path logPath = Paths.get(pathToDir);
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(logPath, fileExtension)) {
+            for (Path entry : stream) {
+                new File(entry.toAbsolutePath().toString()).delete();
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    
 }

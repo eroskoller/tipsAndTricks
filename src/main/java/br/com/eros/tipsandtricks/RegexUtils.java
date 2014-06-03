@@ -34,23 +34,17 @@ public class RegexUtils {
         CharSequence s = stringStream;//IOUtils.getStringFromFile(fileName);
         pattern = Pattern.compile("\\" + charaterSeparator1 + "((\\s*?.*?)*?)\\" + charaterSeparator2 + "");
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         matcher = pattern.matcher(s);
-
         while (matcher.find()) {
 
-            String email = matcher.group();
-
-            if (email != null && email.length() > 2) {
-                email = email.substring(1, email.length() - 1);
-
-                sb.append(email + "\n");
+            String strMatcher = matcher.group();
+            if (strMatcher != null && strMatcher.length() > 2) {
+                strMatcher = strMatcher.substring(1, strMatcher.length() - 1);
+                sb.append(strMatcher).append("\n");
             }
-
         }
-
         return sb.toString();
-
     }
 
     /**
@@ -72,15 +66,13 @@ public class RegexUtils {
         pattern = Pattern.compile("\\" + charaterSeparator1 + "((\\s*?.*?)*?)\\" + charaterSeparator2 + "");
 
         //long i = 0;
-        Long y = new Long(0);
-        StringBuffer sb = new StringBuffer();
+        Long y = (long) 0;
+        StringBuilder sb = new StringBuilder();
         matcher = pattern.matcher(s);
 
         while (matcher.find()) {
             y++;
-
         }
-
         return y;
     }
 
