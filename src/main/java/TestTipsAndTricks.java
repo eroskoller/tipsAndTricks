@@ -1,4 +1,5 @@
 
+import br.com.eros.tipsandtricks.Cpf;
 import br.com.eros.tipsandtricks.io.OsUtils;
 
 /*
@@ -14,7 +15,10 @@ import br.com.eros.tipsandtricks.io.OsUtils;
 public class TestTipsAndTricks {
     
     public static void main(String[] args) {
-        System.out.println(OsUtils.isUnix());
+//        System.out.println(OsUtils.isUnix());
+        
+        System.out.println(Cpf.formatingCpf("21304365875"));
+        System.out.println(Cpf.cpfValidador(Cpf.formatingCpf("21304365875")));
     }
     
 }
