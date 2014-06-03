@@ -137,9 +137,9 @@ public class Cpf {
 
             int control = strCpf.length() - 2;
 
-            strCpf2 = strCpf.substring(0, control);
-            cpfDig0 = strCpf.substring(control, control + 1);
-            cpfDig1 = strCpf.substring(control + 1, control + 2);
+            strCpf2 = strCpf.substring(0, control);//23043658
+            cpfDig0 = strCpf.substring(control, control + 1);//7
+            cpfDig1 = strCpf.substring(control + 1, control + 2);//5
 
             Integer dig0 = new Integer(cpfDig0);
             Integer dig1 = new Integer(cpfDig1);
