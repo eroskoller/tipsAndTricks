@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package br.com.eros.tipsandtricks;
+package br.com.zeros.tipsandtricks;
 import java.util.*;
 /**
  *

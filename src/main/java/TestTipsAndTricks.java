@@ -1,6 +1,6 @@
 
-import br.com.eros.tipsandtricks.StringsUtils;
-import br.com.eros.tipsandtricks.io.IOUtils;
+import br.com.zeros.tipsandtricks.StringsUtils;
+import br.com.zeros.tipsandtricks.io.IOUtils;
 import java.util.List;
 
 /*

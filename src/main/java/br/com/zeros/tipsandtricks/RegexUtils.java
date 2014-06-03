@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.eros.tipsandtricks;
+package br.com.zeros.tipsandtricks;
 
-import br.com.eros.tipsandtricks.io.IOUtils;
+import br.com.zeros.tipsandtricks.io.IOUtils;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

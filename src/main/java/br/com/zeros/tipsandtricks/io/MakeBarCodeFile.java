@@ -1,4 +1,4 @@
-package br.com.eros.tipsandtricks.io;
+package br.com.zeros.tipsandtricks.io;
 
 /*
  * To change this template, choose Tools | Templates
