@@ -136,11 +136,7 @@ public class IOUtils {
     }
 }
     
-     /**
-     * 
-     * @param filePath
-     * @return A txt content of a file
-     */
+   
     public static String testLastLine(String filePath) {
         String line = "";
         String lastLine = "";
@@ -148,9 +144,10 @@ public class IOUtils {
 //        StringBuilder sb = new StringBuilder();
         Path pathFile = Paths.get(filePath);
         try (BufferedReader reader = Files.newBufferedReader(pathFile,StandardCharsets.UTF_8)) {
-             while((line = reader.readLine()) != null){ 
-                 lastLine = line;
-             }
+            for(String s;(s = reader.readLine()) != null;  lastLine = s  ){}
+//             while((line = reader.readLine()) != null){ 
+//                 lastLine = line;
+//             }
 //            lastLine =  reader.readLine();
              
         } catch (IOException xcp) {
