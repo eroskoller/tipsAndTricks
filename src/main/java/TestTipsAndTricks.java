@@ -3,6 +3,7 @@ import br.com.zeros.tipsandtricks.StringsUtils;
 import br.com.zeros.tipsandtricks.cryto.EncryptionStrings;
 import br.com.zeros.tipsandtricks.cryto.HMACDigest;
 import br.com.zeros.tipsandtricks.io.IOUtils;
+import java.io.File;
 import java.util.List;
 
 /*
@@ -57,6 +58,10 @@ public class TestTipsAndTricks {
         
         
 //        System.out.println(StringsUtils.replaceNoASCII("éros glauço kóller"));
+        
+        File file = new File("/home/eros/Documents/SISLU/url_test_sislu.txt");
+        System.out.println(IOUtils.getLastLineFromFile(file,2));
+        
         
     }
     
