@@ -24,14 +24,14 @@ public class RegexUtils {
 
     public static String getStringFromFileBySeparator(String fileName, String charaterSeparator1, String charaterSeparator2) {
 
-        String s = IOUtils.getStringFromFile(fileName);
+        String s = IOUtils.grabStringFromFile(fileName);
 
         return getStringFromStringBySeparator(s, charaterSeparator1, charaterSeparator2);
     }
 
     public static String getStringFromStringBySeparator(String stringStream, String charaterSeparator1, String charaterSeparator2) {
 
-        CharSequence s = stringStream;//IOUtils.getStringFromFile(fileName);
+        CharSequence s = stringStream;//IOUtils.grabStringFromFile(fileName);
         pattern = Pattern.compile("\\" + charaterSeparator1 + "((\\s*?.*?)*?)\\" + charaterSeparator2 + "");
 
         StringBuilder sb = new StringBuilder();
@@ -62,7 +62,7 @@ public class RegexUtils {
 
         //System.out.println(stringStream.length());
         //stringStream = stringStream.substring(0, 9000);
-        CharSequence s = stringStream;//IOUtils.getStringFromFile(fileName);
+        CharSequence s = stringStream;//IOUtils.grabStringFromFile(fileName);
         pattern = Pattern.compile("\\" + charaterSeparator1 + "((\\s*?.*?)*?)\\" + charaterSeparator2 + "");
 
         //long i = 0;

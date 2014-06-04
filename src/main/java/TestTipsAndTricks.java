@@ -1,10 +1,6 @@
 
-import br.com.zeros.tipsandtricks.StringsUtils;
-import br.com.zeros.tipsandtricks.cryto.EncryptionStrings;
-import br.com.zeros.tipsandtricks.cryto.HMACDigest;
 import br.com.zeros.tipsandtricks.io.IOUtils;
 import java.io.File;
-import java.util.List;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -59,8 +55,11 @@ public class TestTipsAndTricks {
         
 //        System.out.println(StringsUtils.replaceNoASCII("éros glauço kóller"));
         
-        File file = new File("/home/eros/Documents/SISLU/url_test_sislu.txt");
-        System.out.println(IOUtils.getLastLineFromFile(file,2));
+//        File file = new File("/home/eros/Documents/SISLU/url_test_sislu.txt");
+//        System.out.println(IOUtils.grabLastLineFromFile(file,2));
+        System.out.println(IOUtils.testLastLine("/home/eros/Documents/SISLU/url_test_sislu.txt"));
+        
+        
         
         
     }

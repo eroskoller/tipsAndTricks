@@ -13,9 +13,11 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.rtf.RTFEditorKit;
@@ -26,7 +28,7 @@ import javax.swing.text.rtf.RTFEditorKit;
  */
 public class IOUtils {
 
-    public static String getStringFromFile(String filename) {
+    public static String grabStringFromFile(String filename) {
 
         BufferedReader br = null;
         StringBuilder sb = new StringBuilder();
@@ -56,7 +58,7 @@ public class IOUtils {
      * @param filePath
      * @return A txt content of a file
      */
-    public static String getTxtFromFile(String filePath) {
+    public static String grabTxtFromFile(String filePath) {
 
         BufferedReader br = null;
         StringBuilder sb = new StringBuilder();
@@ -77,56 +79,15 @@ public class IOUtils {
      * @param filePath
      * @return the last line of a file
      */
-    public static String getLastLineFromFile(File file) {
-        RandomAccessFile fileHandler = null;
-        try {
-            fileHandler = new RandomAccessFile(file, "r");
-            long fileLength = fileHandler.length() - 1;
-            StringBuilder sb = new StringBuilder();
-
-            for (long filePointer = fileLength; filePointer != -1; filePointer--) {
-                fileHandler.seek(filePointer);
-                int readByte = fileHandler.readByte();
-
-                if (readByte == 0xA) {
-                    if (filePointer == fileLength) {
-                        continue;
-                    }
-                    break;
-
-                } else if (readByte == 0xD) {
-                    if (filePointer == fileLength - 1) {
-                        continue;
-                    }
-                    break;
-                }
-
-                sb.append((char) readByte);
-            }
-
-            String lastLine = sb.reverse().toString();
-            return lastLine;
-        } catch (java.io.FileNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        } catch (java.io.IOException e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            if (fileHandler != null) {
-                try {
-                    fileHandler.close();
-                } catch (IOException e) {
-                    /* ignore */
-                }
-            }
-        }
+    public static String grabLastLineFromFile(File file) {
+        return grabLastLineFromFile(file, 1);
     }
     
     
-    public static String getLastLineFromFile( File file, int lines) {
+    public static String grabLastLineFromFile( File file, int lines) {
     java.io.RandomAccessFile fileHandler = null;
     try {
+        
         fileHandler = new java.io.RandomAccessFile( file, "r" );
         long fileLength = fileHandler.length() - 1;
         StringBuilder sb = new StringBuilder();
@@ -153,6 +114,7 @@ public class IOUtils {
                     break;
                 }
             }
+            System.out.println(new Character((char)readByte ))  ;
             sb.append( ( char ) readByte );
         }
 
@@ -174,6 +136,28 @@ public class IOUtils {
     }
 }
     
+     /**
+     * 
+     * @param filePath
+     * @return A txt content of a file
+     */
+    public static String testLastLine(String filePath) {
+        String line = "";
+        String lastLine = "";
+        BufferedReader br = null;
+//        StringBuilder sb = new StringBuilder();
+        Path pathFile = Paths.get(filePath);
+        try (BufferedReader reader = Files.newBufferedReader(pathFile,StandardCharsets.UTF_8)) {
+             while((line = reader.readLine()) != null){ 
+                 lastLine = line;
+             }
+//            lastLine =  reader.readLine();
+             
+        } catch (IOException xcp) {
+            xcp.printStackTrace();
+        }
+        return lastLine;
+    }
     
 @Deprecated
     public static boolean saveStringToFile(String filename, String stringStream) {
@@ -205,7 +189,7 @@ public class IOUtils {
         }
     }
 
-    public static String getExternalPageSourceCode(String strUrl) {
+    public static String grabExternalPageSourceCode(String strUrl) {
         try {
             URL url = new URL(strUrl);
             BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
@@ -227,7 +211,7 @@ public class IOUtils {
         return null;
     }
 
-    public static String getStringFromInputStream(InputStream inputStream) {
+    public static String grabStringFromInputStream(InputStream inputStream) {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
             StringBuilder builder = new StringBuilder();
@@ -248,7 +232,7 @@ public class IOUtils {
         return null;
     }
 
-    public static InputStream getInputStreamFromString(String strTxt) {
+    public static InputStream grabInputStreamFromString(String strTxt) {
         try {
             return new ByteArrayInputStream(strTxt.getBytes(StandardCharsets.UTF_8));
         } catch (Exception xcp) {
@@ -261,7 +245,7 @@ public class IOUtils {
         try {
             RTFEditorKit rtfParser = new RTFEditorKit();
             Document document = rtfParser.createDefaultDocument();
-            rtfParser.read(IOUtils.getInputStreamFromString(strRTF), document, 0);
+            rtfParser.read(IOUtils.grabInputStreamFromString(strRTF), document, 0);
             return document.getText(0, document.getLength());
         } catch (BadLocationException ex) {
             Logger.getLogger(IOUtils.class.getName()).log(Level.SEVERE, null, ex);
